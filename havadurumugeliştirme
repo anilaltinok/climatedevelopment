@@ -1,0 +1,38 @@
+import requests
+
+
+def hava_durumu_sorgula(api_key, sehir):
+    api_endpoint = "http://api.openweathermap.org/data/2.5/weather"
+
+    params = {'q': sehir,'appid': api_key}
+
+
+    response = requests.get(api_endpoint, params).json()
+
+    if response:
+        hava_durumu = response
+        sicaklik = int(hava_durumu['main']['temp']-273.15)
+        nem = hava_durumu['main']['humidity']
+        basınç = hava_durumu['main']['pressure']
+        rüzgar_hızı = hava_durumu['wind']['speed']
+        görüs_mesafesi = int(hava_durumu['visibility']/1000)
+        print(f"{sehir} şehrinin güncel sıcaklığı: {sicaklik}°C")
+        print(f"Nem oranı: {nem}%")
+        print(f"Basınç: {basınç}Mb")
+        print(f"Rüzgar Hızı:{rüzgar_hızı}knot")
+        print(f"Görüş Mesafesi: {görüs_mesafesi}km")
+    else:
+        print(f"Hava durumu bilgisi alınamadı.")
+
+
+if __name__ == "__main__":
+    api_key = "48231f1e190d256221f27d8f84d6c586"
+
+    while True:
+        sehir = input("Hava durumu bilgisini öğrenmek istediğiniz şehri girin (çıkmak için 'q' tuşuna basın): ")
+
+        if sehir.lower() == 'q':
+            print("Programdan çıkılıyor...")
+            break
+
+        hava_durumu_sorgula(api_key, sehir)
